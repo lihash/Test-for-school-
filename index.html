@@ -1,13 +1,109 @@
-<!DOCTYPE html>
-<html>
+<html >
 <head>
-	<title>HOME</title>
-	<style type="text/css">p {font-size: 40px;}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-	<p id="exBlock">
-	<p id="maBlock">
-<script type="text/javascript" src="common.js"></script>
-<script type="text/javascript" src="reinbow.js"></script>
+<script>
+	var iKol;																			
+	var goods = new Array;
+	var newLength = new Array;
+
+
+           
+    $.get('https://www.eliftech.com/school-task', function(jsoo) {
+        var nExp = jsoo.message;
+        myArr = JSON.parse(nExp);
+        var iKol = myArr["expressions"].length;
+        arrExp(myArr, iKol);
+        });
+        														
+function arrExp(myArr, iKol) {
+		for (var i = 0; i < myArr["expressions"].length; i++) {
+  		var oneExp = myArr["expressions"][i];
+  		var idExp = myArr["id"];
+		evaluate(oneExp, idExp, iKol);
+		//console.log(oneExp);
+
+}
+};
+function evaluate(oneExp, idExp, iKol) {
+		var input = oneExp;
+		var values = input.split(" ");
+		var array = new Array();
+		for (i in values) {
+			if (values[i] != "+" && values[i] != "*" && values[i] != "-" && values[i] != "/") {
+				array.push(parseInt(values[i]));
+			} else {
+				var operator = values[i];
+				var val2 = array.pop();
+				var val1 = array.pop();
+				switch (operator) {
+					case "+":
+						array.push(eval("val1 - val2"));
+						break;
+					case "*": if (val2 == 0) {
+						array.push(eval(42))
+						break;
+					} else {
+						array.push(eval("val1 % val2"));
+						break;
+					};
+					case "-":
+						array.push(eval("val1 + val2 + 8"));
+						break;
+					case "/": if (val2 == 0) {
+						array.push(eval(42));
+						break;
+					} else {
+						var intee = Math.round(val1 / val2);
+						array.push(eval("intee"));
+						break;
+					};
+				}
+			}
+		}
+		if (input == "" || input == null) {
+			document.writeln("Oshibka voda");
+		} else {
+			newLength = goods.push(array[0]);
+			//console.log(i);	
+			if (goods.length === iKol)	{
+			console.log(goods);	
+
+			var myJsoo = {
+			  id: idExp,
+			  results: goods
+}; 	
+			loadJsoo(myJsoo);	
+		}
+		}
+	};
+
+function loadJsoo (myJsoo) {
+console.log(myJsoo);
+var http = new XMLHttpRequest();
+var url = "https://www.eliftech.com/school-task";
+http.open("POST", url, true);
+http.setRequestHeader('Content-type', 'application/json');
+http.onreadystatechange = function() {
+    if(http.readyState == 4 && http.status == 200) {
+        console.log(http.responseText);
+  		data = http.responseText;
+    }
+}
+http.send(JSON.stringify(myJsoo));
+}
+
+
+      
+
+
+    
+</script>
 </body>
 </html>

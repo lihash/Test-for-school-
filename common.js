@@ -18,6 +18,7 @@ function arrExp(myArr, iKol) {
   		var oneExp = myArr["expressions"][i];
   		var idExp = myArr["id"];
 		evaluate(oneExp, idExp, iKol);
+		//console.log(oneExp);
 
 }
 };
@@ -50,7 +51,7 @@ function evaluate(oneExp, idExp, iKol) {
 						array.push(eval(42));
 						break;
 					} else {
-						var intee = Math.round(val1 / val2)
+						var intee = Math.floor(val1 / val2);
 						array.push(eval("intee"));
 						break;
 					};
